@@ -1,0 +1,25 @@
+{
+  "name": "cytoscape-eval",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "webpack-dev-server --progress --inline --colors --watch-poll",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cytoscape": "^2.7.10",
+    "jquery": "^3.1.1",
+    "lodash": "^4.16.4",
+    "normalize.css": "^5.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.16.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
