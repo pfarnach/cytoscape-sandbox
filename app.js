@@ -22,7 +22,9 @@ const cy = cytoscape({
       selector: 'node',
       style: {
         'background-color': '#666',
-        'label': 'data(id)'
+        'label': 'data(id)',
+        'background-image': './assets/fillmurray.jpg',
+        'background-fit': 'cover'
       }
     },
 
@@ -30,6 +32,7 @@ const cy = cytoscape({
       selector: 'edge',
       style: {
         'width': 3,
+        'curve-style': 'bezier',
         'line-color': '#ccc',
         'target-arrow-color': '#ccc',
         'target-arrow-shape': 'triangle'
@@ -48,7 +51,8 @@ const cy = cytoscape({
 // ---------------
 // -- ADD TEST ---
 // ---------------
-const count = 100;  // Modify this number
+
+const count = 1000;  // Modify this number
 const nodeRange = _.range(0, count - 1);
 const linkRange = _.range(0, count - 2);
 
@@ -76,6 +80,18 @@ const edgesToAdd = _.map(linkRange, val => {
 	};
 });
 
+const inverseEdgesToAdd = _.map(_.reverse(linkRange), val => {
+  return {
+    group: "edges",
+    data: {
+      source: val + 1,
+      target: val,
+      myLabel: val % 2 === 0 ? "Even" : "Odd",
+      weight: val * 10
+    }
+  };
+});
+
 // Time to add nodes and links
 console.time('Add total');
 
@@ -84,7 +100,7 @@ cy.add(nodesToAdd);
 console.timeEnd('Add nodes');
 
 console.time('Add edges');
-cy.add(edgesToAdd);	
+cy.add([...edgesToAdd, ...inverseEdgesToAdd]);	
 console.timeEnd('Add edges');
 
 console.timeEnd('Add total');
@@ -184,7 +200,7 @@ const layoutOptions = {
 };
 
 // cy.layout(layoutOptions1);
-cy.layout(layoutOptions);
+// cy.layout(layoutOptions);
 
 
 
