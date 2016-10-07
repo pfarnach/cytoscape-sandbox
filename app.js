@@ -5,18 +5,6 @@ import _ from 'lodash';
 const cy = cytoscape({
   container: document.getElementById('cy'), // container to render in
 
-  // elements: [ // list of graph elements to start with
-  //   { // node a
-  //     data: { id: 'a' }
-  //   },
-  //   { // node b
-  //     data: { id: 'b' }
-  //   },
-  //   { // edge ab
-  //     data: { id: 'ab', source: 'a', target: 'b' }
-  //   }
-  // ],
-
   style: [ // the stylesheet for the graph
     {
       selector: 'node',
@@ -52,9 +40,9 @@ const cy = cytoscape({
 // -- ADD TEST ---
 // ---------------
 
-const count = 1000;  // Modify this number
-const nodeRange = _.range(0, count - 1);
-const linkRange = _.range(0, count - 2);
+const count = 10;  // <-- Modify this number
+const nodeRange = _.range(0, count);
+const linkRange = _.range(0, count - 1);
 
 const nodesToAdd = _.map(nodeRange, val => {
 	return {
@@ -133,6 +121,7 @@ console.timeEnd('Look up nodes by value prop');
 // console.log('set cy.scratch()', cy.scratch('test1', { some: 'val' }));
 // console.log('get cy.scratch()', cy.scratch('test1'));
 
+
 // --------------
 // --- Events ---
 // --------------
@@ -142,7 +131,9 @@ function clickCallback(evt) {
 	console.log('evt', evt.data.myBoundData);
 }
 
+// Promise that will only be resolved once
 cy.promiseOn('click', 'edge').then(evt => console.log('click promise resolved', evt));
+
 
 // ----------------
 // -- Animations --
@@ -166,6 +157,7 @@ cy.promiseOn('click', 'edge').then(evt => console.log('click promise resolved', 
 // }, {
 //   duration: 1000
 // });
+
 
 // ---------------
 // --- Layouts ---
@@ -199,8 +191,76 @@ const layoutOptions = {
   stop: undefined // callback on layoutstop
 };
 
-// cy.layout(layoutOptions1);
-// cy.layout(layoutOptions);
+const layoutOptions2 = {
+  name: 'cose',
+
+  // Called on `layoutready`
+  ready: function(){},
+
+  // Called on `layoutstop`
+  stop: function(){},
+
+  // Whether to animate while running the layout
+  animate: true,
+
+  // The layout animates only after this many milliseconds
+  // (prevents flashing on fast runs)
+  animationThreshold: 250,
+
+  // Number of iterations between consecutive screen positions update
+  // (0 -> only updated on the end)
+  refresh: 20,
+
+  // Whether to fit the network view after when done
+  fit: true,
+
+  // Padding on fit
+  padding: 30,
+
+  // Constrain layout bounds; { x1, y1, x2, y2 } or { x1, y1, w, h }
+  boundingBox: undefined,
+
+  // Randomize the initial positions of the nodes (true) or use existing positions (false)
+  randomize: false,
+
+  // Extra spacing between components in non-compound graphs
+  componentSpacing: 100,
+
+  // Node repulsion (non overlapping) multiplier
+  nodeRepulsion: function( node ){ return 400000; },
+
+  // Node repulsion (overlapping) multiplier
+  nodeOverlap: 10,
+
+  // Ideal edge (non nested) length
+  idealEdgeLength: function( edge ){ return 10; },
+
+  // Divisor to compute edge forces
+  edgeElasticity: function( edge ){ return 100; },
+
+  // Nesting factor (multiplier) to compute ideal edge length for nested edges
+  nestingFactor: 5,
+
+  // Gravity force (constant)
+  gravity: 80,
+
+  // Maximum number of iterations to perform
+  numIter: 1000,
+
+  // Initial temperature (maximum node displacement)
+  initialTemp: 200,
+
+  // Cooling factor (how the temperature is reduced between consecutive iterations
+  coolingFactor: 0.95,
+
+  // Lower temperature threshold (below this point the layout will end)
+  minTemp: 1.0,
+
+  // Whether to use threading to speed up the layout
+  useMultitasking: true
+};
+
+cy.layout(layoutOptions2);
 
 
 
